@@ -5,7 +5,7 @@ output: html_notebook
 
 Levantar la tabla parcial que contiene solo las variables categóricas (8 ocho) (30/11/2017)
 ```{r}
-unlp_ris_rg <- read.csv2("Presencia_investigadores_UNLP_en_RG_y_RIS_parcial.csv", header = TRUE, na.strings = "NA")
+unlp_ris_rg <- read.csv2("Presencia_investigadores_UNLP_en_RG_y_RIS_parcial_7.csv", header = TRUE, na.strings = "NA")
 ```
 
 Convertir el data.frame en tipo tibble
