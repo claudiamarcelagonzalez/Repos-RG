@@ -73,7 +73,7 @@ presencia1 <- presencia1 %>%
 
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE }
-# CARGO PAQUETES:
+# CARGO PAQUETES (fijate que los tengas instalados en el rígido)
 
 library("FactoMineR")
 library("factoextra")
