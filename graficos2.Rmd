@@ -1,9 +1,6 @@
 ---
 title: "Planos factoriales"
-output:
-  word_document: default
-  html_notebook: default
-  html_document: default
+
 ---
 
 
