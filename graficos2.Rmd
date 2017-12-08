@@ -12,6 +12,8 @@ knitr::opts_chunk$set(error = TRUE)
 
 #Echo false evita que salga código en output, lo esconde. Lo mismo warnings y message, cuando carga paquetes que a aveces pone warnings.
 
+#Al final de este script, si anduvo todo bien probá de sacar el output o informe en algún formato.
+
 library(tidyverse)
 ```
 
