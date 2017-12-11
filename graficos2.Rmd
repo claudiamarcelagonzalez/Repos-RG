@@ -41,8 +41,8 @@ presencia <-
 #CONVIERTO LAS VARIABLES A USAR EN FACTORES:
 
 presencia$Fac <- as.factor(presencia$Facultad)
-presencia$cat <- as.factor(presencia$Categoria)
-presencia$RG <- as.factor(presencia$ResearchGate)
+presencia$Cat <- as.factor(presencia$Categoria)
+presencia$RG <-  as.factor(presencia$ResearchGate)
 presencia$SED <- as.factor(presencia$SEDICI)
 presencia$MEM <- as.factor(presencia$Memoria)
 presencia$NAT <- as.factor(presencia$Naturalis)
@@ -54,7 +54,7 @@ presencia$NAT <- as.factor(presencia$Naturalis)
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 #Creo un nuevo dataset a partir del anterior:
 presencia1 <- presencia %>% 
-  select(Fac, cat, RG, SED, MEM, NAT)
+  select(Fac, Cat, RG, SED, MEM, NAT)
 ```
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
@@ -67,7 +67,7 @@ load(file="presencia1.RData")
 
 #Saco los NA de Categoría de incentivos, sino deforman el plano factorial
 presencia1 <- presencia1 %>% 
-  filter(!is.na(cat)) 
+  filter(!is.na(Cat)) 
 ```
 
 
