@@ -73,7 +73,9 @@ load(file="presencia3.RData")
 
 #Saco los NA de Categoría de incentivos, sino deforman el plano factorial
 presencia3 <- presencia3 %>% 
-  filter(!is.na(Cat)) 
+  filter(!is.na(Cat)) %>%
+  filter(!is.na(Ed)) %>%
+  filter(!Ed == "Menor-30") 
 ```
 
 
