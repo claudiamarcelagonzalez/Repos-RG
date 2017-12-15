@@ -160,5 +160,15 @@ fviz_contrib(presencia3.mca, choice = "var", axes = 2, top = 15)
 ```
 
 
+##Esto para ver cuantos factores y la varianza explicada por cada uno:
+
+```{r, echo=FALSE}
+eig.val <- get_eigenvalue(presencia3.mca)
+head(eig.val)
+```
+
+```{r, echo=FALSEE}
+fviz_screeplot(presencia3.mca, addlabels = TRUE, ylim = c(0, 45))
+```
 
 
