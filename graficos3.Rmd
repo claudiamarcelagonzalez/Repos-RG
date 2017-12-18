@@ -36,7 +36,7 @@ presencia <- read_delim("C:/Users/User/Desktop/Seba/Datasets enraizados. No toca
 
 # RUTA DE ACCESO DE CLAUDIA AL ARCHIVO (mantener el nombre presencia):
 
-presencia2 <- read_delim("/Users/claudiamgonzalez/Documents/INV/DATOS/Repositorios-RG/2017_12_7/Tabla_datos_RG_y_RIS_actualizada.csv", 
+presencia6 <- read_delim("/Users/claudiamgonzalez/Documents/INV/DATOS/Repositorios-RG/2017_12_7/Tabla_datos_RG_y_RIS_actualizada.csv", 
     ";", escape_double = FALSE, trim_ws = TRUE)
 
 ```
@@ -45,13 +45,11 @@ presencia2 <- read_delim("/Users/claudiamgonzalez/Documents/INV/DATOS/Repositori
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 #CONVIERTO LAS VARIABLES A USAR EN FACTORES:
 
-presencia2$Fac <- as.factor(presencia2$Facultad)
-presencia2$Sex <- as.factor(presencia2$Sexo)
-presencia2$Cat <- as.factor(presencia2$Categoria)
-presencia2$Ed <- as.factor(presencia2$Edad)
-presencia2$RG <-  as.factor(presencia2$ResearchGate)
-presencia2$Repos <- as.factor(presencia2$Repos)
-
+presencia6$Fac <- as.factor(presencia6$Facultad)
+presencia6$Cat <- as.factor(presencia6$Categoria)
+presencia6$Ed <- as.factor(presencia6$Edad)
+presencia6$Pref <- as.factor(presencia6$Prefer)
+presencia6$Cant <- as.factor(presencia6$Cantidad)
 
 #Al la derecha del dataset hay nuevas variables que son factores.
 ```
@@ -59,23 +57,26 @@ presencia2$Repos <- as.factor(presencia2$Repos)
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 #Creo un nuevo dataset a partir del anterior:
-presencia3 <- presencia2 %>% 
-  select(Fac, Sex, Cat, Ed, RG, Repos)
+presencia7 <- presencia6 %>% 
+  select(Fac, Cat, Ed, Pref, Cant)
 ```
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
-save(presencia3,file="presencia3.RData")
-load(file="presencia3.RData")
+save(presencia7,file="presencia7.RData")
+load(file="presencia7.RData")
 ```
 
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 
 #Saco los NA de Categoría de incentivos, sino deforman el plano factorial
-presencia3 <- presencia3 %>% 
+presencia7 <- presencia7 %>% 
   filter(!is.na(Cat)) %>%
   filter(!is.na(Ed)) %>%
+  filter(!is.na(Pref)) %>%
+  filter(!is.na(Cant)) %>%
   filter(!Ed == "Menor-30") 
+
 ```
 
 
@@ -90,26 +91,74 @@ library("factoextra")
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
 #Una función para plotear las variables, variables con bajo n pueden distorsionar el analisis
 #i in 2:4 selecciona columnas del dataset
-for (i in 1:6) {
-  plot(presencia3 [,i], main=colnames(presencia3)[i],
+for (i in 1:5) {
+  plot(presencia7 [,i], main=colnames(presencia7)[i],
        ylab = "Count", col="steelblue", las = 2)
   }
 ```
 
 
 ```{r, echo=FALSE}
-#Aca MCA se hace sobre el dataset presencia1:
+#Aca MCA se hace sobre el dataset presencia7:
 
-presencia3.mca <- MCA(presencia3, graph = FALSE)
+presencia7.mca <- MCA(presencia7, graph = FALSE)
 
 #crea un objeto list
+```
+
+```{r}
+fviz_ellipses(presencia7.mca, c("Ed", "Cat", "Fac", "Pref", "Cant"),
+              geom = "point", label)
+
+```
+
+```{r}
+fviz_mca_biplot(presencia7.mca, 
+             habillage = "Ed", label= "none",
+             palette = c("red", "blue", "green", "grey", "brown"),
+             invisible = c("var"), 
+             addEllipses = TRUE, ellipse.type = "confidence",
+             ggtheme = theme_minimal()) 
+
+fviz_mca_biplot(presencia7.mca, 
+             habillage = "Fac", label= "none",
+             palette = c("red", "blue", "green", "grey", "brown"),
+             invisible = c("var"), 
+             addEllipses = TRUE, ellipse.type = "confidence",
+             ggtheme = theme_minimal()) 
+
+fviz_mca_biplot(presencia7.mca, 
+             habillage = "Cat", label= "none",
+             palette = c("red", "blue", "green", "grey", "brown"),
+             invisible = c("var"), 
+             addEllipses = TRUE, ellipse.type = "confidence",
+             ggtheme = theme_minimal()) 
+
+fviz_mca_biplot(presencia7.mca, 
+             habillage = "Pref", label= "none",
+             palette = c("red", "blue", "green", "grey", "brown"),
+             invisible = c("var"), 
+             addEllipses = TRUE, ellipse.type = "confidence",
+             ggtheme = theme_minimal()) 
+
+fviz_mca_biplot(presencia7.mca, 
+             habillage = "Cant", label= "none",
+             palette = c("red", "blue", "green", "grey", "brown"),
+             invisible = c("var"), 
+             addEllipses = TRUE, ellipse.type = "confidence",
+             ggtheme = theme_minimal()) 
+```
+
+```{r}
+fviz_mca_ind(presencia7.mca, label="none", habillage=presencia7$Pref,
+     addEllipses=TRUE, ellipse.level=0.95, palette = "Dark2")
 ```
 
 
 ```{r, echo=FALSE}
 #aca se ve claramente la relación entre variables, cuál carga en qué dimensión
 
-fviz_mca_var(presencia3.mca, choice = "mca.cor", 
+fviz_mca_var(presencia7.mca, choice = "mca.cor", 
             repel = TRUE, # Avoid text overlapping (slow)
             ggtheme = theme_gray())
 ```
@@ -118,7 +167,7 @@ La categoría de incentivos casi no influye en ninguna dimensión... es bastante
 
 
 ```{r, echo=FALSE}
-fviz_mca_var(presencia3.mca, 
+fviz_mca_var(presencia7.mca, 
              repel = TRUE, 
              ggtheme = theme_minimal())
 ```
@@ -130,7 +179,7 @@ fviz_mca_var(presencia3.mca,
 
 ###ESTE ES EL GRAFICO CENTRAL QUE HAY QUE INTERPRETAR
 
-fviz_mca_var(presencia3.mca, col.var="black", shape.var = 15,
+fviz_mca_var(presencia7.mca, col.var="black", shape.var = 15,
              repel = TRUE)
 ```
 
@@ -144,7 +193,7 @@ El gráfico que sigue ayuda a la interpretación pues indica cuales son las cate
 
 
 ```{r, echo=FALSE}
-fviz_mca_var(presencia3.mca, col.var = "cos2",
+fviz_mca_var(presencia7.mca, col.var = "cos2",
              gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"), 
              repel = TRUE, # Avoid text overlapping
              ggtheme = theme_minimal())
@@ -153,22 +202,30 @@ fviz_mca_var(presencia3.mca, col.var = "cos2",
 Acá que se ve algo parecido: qué categoría contribuye a qué dimensión:
 
 ```{r, echo=FALSE}
+fviz_contrib(presencia7.mca, choice = "var", axes = 1, top = 15)
+
+fviz_contrib(presencia7.mca, choice = "var", axes = 2, top = 15)
+
+```
+
+Acá que se ve algo parecido: qué categoría contribuye a qué dimensión:
+
+```{r}
 fviz_contrib(presencia3.mca, choice = "var", axes = 1, top = 15)
 
 fviz_contrib(presencia3.mca, choice = "var", axes = 2, top = 15)
-
 ```
 
 
-##Esto para ver cuantos factores y la varianza explicada por cada uno:
+Esto para ver cuantos factores y la varianza explicada por cada uno:
 
-```{r, echo=FALSE}
+```{r}
 eig.val <- get_eigenvalue(presencia3.mca)
 head(eig.val)
-```
 
-```{r, echo=FALSEE}
 fviz_screeplot(presencia3.mca, addlabels = TRUE, ylim = c(0, 45))
 ```
+
+
 
 

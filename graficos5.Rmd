@@ -228,3 +228,4 @@ fviz_screeplot(presencia3.mca, addlabels = TRUE, ylim = c(0, 45))
 
 
 
+
